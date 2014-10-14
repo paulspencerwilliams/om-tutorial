@@ -11,12 +11,12 @@
 (def app-state
   (atom
     {:tasks
-     [{:first "Ben" :last "Bitdiddle" :email "benb@mit.edu"}
-      {:first "Alyssa" :middle-initial "P" :last "Hacker" :email "aphacker@mit.edu"}
-      {:first "Eva" :middle "Lu" :last "Ator" :email "eval@mit.edu"}
-      {:first "Louis" :last "Reasoner" :email "prolog@mit.edu"}
-      {:first "Cy" :middle-initial "D" :last "Effect" :email "bugs@mit.edu"}
-      {:first "Lem" :middle-initial "E" :last "Tweakit" :email "morebugs@mit.edu"}]}))
+     [{:first "Ben" :last "Bitdiddle"}
+      {:first "Alyssa" :middle-initial "P" :last "Hacker"}
+      {:first "Eva" :middle "Lu" :last "Ator"}
+      {:first "Louis" :last "Reasoner"}
+      {:first "Cy" :middle-initial "D" :last "Effect"}
+      {:first "Lem" :middle-initial "E" :last "Tweakit"}]}))
 
 (defn parse-task [task-str]
   (let [[first middle last :as parts] (string/split task-str #"\s+")
@@ -35,13 +35,8 @@
     (when new-task
       (om/transact! app :tasks #(conj % new-task)))))
 
-(defn middle-name [{:keys [middle middle-initial]}]
-  (cond
-    middle (str " " middle)
-    middle-initial (str " " middle-initial ".")))
-
 (defn display-name [{:keys [first last] :as task}]
-  (str last ", " first (middle-name task)))
+  (str first ", " last))
 
 (defn task-view [task owner]
   (reify
