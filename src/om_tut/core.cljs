@@ -4,10 +4,16 @@
 
 (enable-console-print!)
 
-(def app-state (atom {:text "Hello world from Paul!"}))
+(def app-state (atom {:list ["Lion" "Zebra" "Buffalo" "Antelope"]}))
+
+(defn stripe [text bgc]
+  (let [st #js {:backgroundColor bgc}]
+    (dom/li #js {:style st} text)))
 
 (om/root
- (fn [app owner]
-   (om/component (dom/h2 nil (:text app))))
- app-state
- {:target (. js/document (getElementById "app0"))})
+  (fn [app owner]
+    (om/component
+      (apply dom/ul #js {:className "animals"}
+        (map stripe (:list app) (cycle ["#ff0" "#fff"])))))
+  app-state
+  {:target (. js/document (getElementById "app0"))})
