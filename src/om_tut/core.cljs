@@ -26,27 +26,27 @@
     (when new-task
       (om/transact! app :tasks #(conj % new-task)))))
 
-(defn display-name [{:keys [title due] :as task}]
+(defn display-task [{:keys [title due] :as task}]
   (str title " due by " due))
 
 (defn task-view [task owner]
   (reify
     om/IRenderState
     (render-state [this {}]
-      (dom/li nil
-        (dom/span nil (display-name task))))))
+      (dom/tr nil
+         (dom/td nil (:title task))
+         (dom/td nil (:due task))))))
 
 (defn tasks-view [app owner]
   (reify
     om/IInitState
     (init-state [_]
       {})
-
     om/IRenderState
     (render-state [this state]
       (dom/div nil
         (dom/h2 nil "task list")
-        (apply dom/ul nil
+        (apply dom/table nil
           (om/build-all task-view (:tasks app)
             {:init-state state}))
         (dom/div nil
